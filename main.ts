@@ -1,4 +1,4 @@
-import { App, Modal, Plugin, PluginSettingTab, Setting, MarkdownPostProcessorContext, editorViewField } from "obsidian";
+import { App, Modal, Plugin, PluginSettingTab, Setting, MarkdownPostProcessorContext } from "obsidian";
 import { ViewPlugin, ViewUpdate, DecorationSet, Decoration, EditorView, WidgetType } from "@codemirror/view";
 import { RangeSetBuilder } from "@codemirror/state";
 
@@ -212,15 +212,21 @@ export default class TimestampPickerPlugin extends Plugin {
                 span.textContent = match[0];
                 const matchedValue = match[0];
 
+                const occurrenceIndex = Array.from(text.matchAll(new RegExp(this.settings.pattern, "g")))
+                    .findIndex(m => m.index === match!.index);
+
                 span.addEventListener("click", (evt) => {
                     evt.preventDefault();
                     evt.stopPropagation();
+                    const targetOccurrence = occurrenceIndex;
                     new TimestampPickerModal(this.app, matchedValue, async (newValue) => {
-                        const file = this.app.vault.getAbstractFileByPath(ctx.sourcePath);
-                        if (file && "path" in file) {
-                            await this.app.vault.process(file as any, (data: string) =>
-                                data.replace(matchedValue, newValue)
-                            );
+                        const file = this.app.vault.getFileByPath(ctx.sourcePath);
+                        if (file) {
+                            await this.app.vault.process(file, (data: string) => {
+                                const re = new RegExp(this.settings.pattern, "g");
+                                let i = 0;
+                                return data.replace(re, (m) => i++ === targetOccurrence ? newValue : m);
+                            });
                         }
                     }).open();
                 });
