@@ -1,0 +1,58 @@
+.timestamp-picker-clickable {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    color: var(--text-accent);
+    transition: opacity 0.15s;
+}
+
+.timestamp-picker-clickable:hover {
+    opacity: 0.8;
+}
+
+.timestamp-picker-modal .setting-item {
+    border: none;
+    padding: 8px 0;
+}
+
+.timestamp-picker-modal input[type="date"],
+.timestamp-picker-modal input[type="time"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid var(--background-modifier-border);
+    background: var(--background-primary);
+    color: var(--text-normal);
+    position: relative;
+}
+
+body.mod-windows .timestamp-picker-modal input[type="date"],
+body.mod-windows .timestamp-picker-modal input[type="time"],
+body.mod-macos .timestamp-picker-modal input[type="date"],
+body.mod-macos .timestamp-picker-modal input[type="time"] {
+    padding-left: var(--size-4-9) !important;
+}
+
+body.mod-windows .timestamp-picker-modal input[type="date"]::-webkit-calendar-picker-indicator,
+body.mod-macos .timestamp-picker-modal input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute !important;
+    left: 8px !important;
+    right: auto !important;
+    cursor: pointer !important;
+}
+
+body.mod-windows .timestamp-picker-modal input[type="time"]::-webkit-calendar-picker-indicator,
+body.mod-macos .timestamp-picker-modal input[type="time"]::-webkit-calendar-picker-indicator {
+    position: absolute !important;
+    left: 0 !important;
+    right: auto !important;
+    cursor: pointer !important;
+}
+
+.timestamp-picker-modal .modal-button-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}

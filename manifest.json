@@ -1,0 +1,10 @@
+{
+    "id": "timestamp-picker",
+    "name": "Timestamp Picker",
+    "version": "1.0.0",
+    "minAppVersion": "1.0.0",
+    "description": "Makes inline timestamps clickable with a date and time picker modal. Works in both Live Preview and Reading view.",
+    "author": "Rémy Bach",
+    "authorUrl": "https://github.com/remybach",
+    "isDesktopOnly": false
+}

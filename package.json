@@ -1,0 +1,28 @@
+{
+    "name": "obsidian-timestamp-picker",
+    "version": "1.0.0",
+    "description": "Obsidian plugin that makes inline timestamps clickable with a date and time picker modal.",
+    "main": "main.js",
+    "scripts": {
+        "build": "node esbuild.config.mjs",
+        "dev": "node esbuild.config.mjs --watch"
+    },
+    "keywords": [
+        "obsidian",
+        "plugin",
+        "timestamp",
+        "date",
+        "time",
+        "picker"
+    ],
+    "author": "Rémy Bach",
+    "license": "MIT",
+    "devDependencies": {
+        "@codemirror/state": "^6.0.0",
+        "@codemirror/view": "^6.0.0",
+        "@types/node": "^20.0.0",
+        "esbuild": "^0.20.0",
+        "obsidian": "latest",
+        "typescript": "^5.0.0"
+    }
+}
