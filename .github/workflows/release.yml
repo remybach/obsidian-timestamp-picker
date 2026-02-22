@@ -1,12 +1,13 @@
 name: Release Obsidian Plugin
 
 on:
-  push:
-    tags:
-      - "*"
+  pull_request:
+    types: [closed]
+    branches: [main]
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +18,10 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./manifest.json').version")" >> $GITHUB_OUTPUT
+
       - name: Build
         run: |
           npm install
@@ -26,7 +31,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${GITHUB_REF#refs/tags/}"
+          tag="${{ steps.version.outputs.version }}"
           gh release create "$tag" \
             --title="$tag" \
             --generate-notes \
