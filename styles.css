@@ -56,3 +56,14 @@ body.mod-macos .timestamp-picker-modal input[type="time"]::-webkit-calendar-pick
     gap: 8px;
     margin-top: 12px;
 }
+
+.timestamp-picker-modal .timestamp-picker-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+}
+
+.timestamp-picker-modal .timestamp-picker-field-group + .timestamp-picker-field-group {
+    margin-top: 12px;
+}
