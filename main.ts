@@ -24,17 +24,14 @@ class TimestampPickerModal extends Modal {
         const currentTime = parts ? parts[2] : "12:00";
 
         this.modalEl.addClass("timestamp-picker-modal");
-        this.titleEl.setText("Edit Timestamp");
+        this.titleEl.setText("Edit timestamp");
 
-        const dateContainer = this.contentEl.createDiv();
-        dateContainer.createEl("label", { text: "Date" }).style.cssText =
-            "display: block; font-weight: 600; margin-bottom: 4px; font-size: 0.9em;";
+        const dateContainer = this.contentEl.createDiv({ cls: "timestamp-picker-field-group" });
+        dateContainer.createEl("label", { text: "Date", cls: "timestamp-picker-label" });
         this.dateInput = dateContainer.createEl("input", { type: "date", value: currentDate });
 
-        const timeContainer = this.contentEl.createDiv();
-        timeContainer.style.marginTop = "12px";
-        timeContainer.createEl("label", { text: "Time" }).style.cssText =
-            "display: block; font-weight: 600; margin-bottom: 4px; font-size: 0.9em;";
+        const timeContainer = this.contentEl.createDiv({ cls: "timestamp-picker-field-group" });
+        timeContainer.createEl("label", { text: "Time", cls: "timestamp-picker-label" });
         this.timeInput = timeContainer.createEl("input", { type: "time", value: currentTime });
 
         const btnRow = this.contentEl.createDiv({ cls: "modal-button-row" });
@@ -111,7 +108,8 @@ export default class TimestampPickerPlugin extends Plugin {
     }
 
     createEditorExtension() {
-        const plugin = this;
+        const pluginSettings = this.settings;
+        const pluginApp = this.app;
         return ViewPlugin.fromClass(
             class {
                 decorations: DecorationSet;
@@ -128,7 +126,7 @@ export default class TimestampPickerPlugin extends Plugin {
 
                 buildDecorations(view: EditorView): DecorationSet {
                     const builder = new RangeSetBuilder<Decoration>();
-                    const regex = new RegExp(plugin.settings.pattern, "g");
+                    const regex = new RegExp(pluginSettings.pattern, "g");
                     const doc = view.state.doc;
                     const selection = view.state.selection.main;
 
@@ -168,7 +166,7 @@ export default class TimestampPickerPlugin extends Plugin {
                                         match[0],
                                         matchFrom,
                                         matchTo,
-                                        plugin.app
+                                        pluginApp
                                     ),
                                 })
                             );
@@ -219,11 +217,13 @@ export default class TimestampPickerPlugin extends Plugin {
                     evt.preventDefault();
                     evt.stopPropagation();
                     const targetOccurrence = occurrenceIndex;
-                    new TimestampPickerModal(this.app, matchedValue, async (newValue) => {
-                        const file = this.app.vault.getFileByPath(ctx.sourcePath);
+                    const settingsPattern = this.settings.pattern;
+                    const vault = this.app.vault;
+                    new TimestampPickerModal(this.app, matchedValue, (newValue) => {
+                        const file = vault.getFileByPath(ctx.sourcePath);
                         if (file) {
-                            await this.app.vault.process(file, (data: string) => {
-                                const re = new RegExp(this.settings.pattern, "g");
+                            void vault.process(file, (data: string) => {
+                                const re = new RegExp(settingsPattern, "g");
                                 let i = 0;
                                 return data.replace(re, (m) => i++ === targetOccurrence ? newValue : m);
                             });
